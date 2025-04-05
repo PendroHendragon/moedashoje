@@ -2,41 +2,84 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="google-site-verification" content="4uF51D80-epovyGyBbIPoLy_bDuAIEGQUYw-ToGhHps" />
   <title>Conversor de Moedas e Criptos</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
+      margin: 0;
       padding: 20px;
       background-color: #f9f9f9;
       text-align: center;
     }
-    h1 {
+
+    h1, h2 {
       color: #333;
+      margin-top: 20px;
     }
-    table {
-      margin: 20px auto;
-      border-collapse: collapse;
-      width: 80%;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-    }
-    th {
-      background-color: #f0f0f0;
-    }
+
     input, select, button {
-      padding: 8px;
-      margin: 5px;
+      width: 100%;
+      max-width: 300px;
+      padding: 10px;
+      margin: 10px auto;
       font-size: 16px;
+      display: block;
     }
+
     #resultado {
       margin-top: 15px;
       font-size: 18px;
       font-weight: bold;
     }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    p {
+      text-align: justify;
+      padding: 0 10px;
+      max-width: 700px;
+      margin: 0 auto 20px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    @media (min-width: 600px) {
+      input, select, button {
+        display: inline-block;
+        width: auto;
+        margin: 5px;
+      }
+
+      #resultado {
+        font-size: 20px;
+      }
+
+      table {
+        font-size: 16px;
+      }
+    }
   </style>
+
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5424832057538843"
      crossorigin="anonymous"></script>
 </head>
@@ -72,33 +115,31 @@
     </thead>
     <tbody></tbody>
   </table>
-  <br>
+
   <div>
-  <h2>Dólar Comercial</h2>
-  <p>O dólar comercial é utilizado em transações de comércio exterior, como importações, exportações, operações financeiras de empresas e movimentações interbancárias. 
-    É a cotação usada pelas instituições financeiras, grandes empresas e pelo governo em negociações oficiais. 
-    Geralmente, essa cotação é mais baixa que a do dólar turismo, pois envolve operações de maior volume e menor custo de intermediação.</p>
+    <h2>Dólar Comercial</h2>
+    <p>O dólar comercial é utilizado em transações de comércio exterior, como importações, exportações, operações financeiras de empresas e movimentações interbancárias. É a cotação usada pelas instituições financeiras, grandes empresas e pelo governo em negociações oficiais. Geralmente, essa cotação é mais baixa que a do dólar turismo, pois envolve operações de maior volume e menor custo de intermediação.</p>
 
-  <h2>Dólar Turismo</h2>
-  <p>Já o dólar turismo é voltado para pessoas físicas que compram a moeda para viagens internacionais, seja em espécie, cartão pré-pago ou transferências para o exterior. 
-    Esse tipo de dólar inclui custos adicionais, como o lucro das casas de câmbio e impostos (como o IOF - Imposto sobre Operações Financeiras), o que faz com que seu valor seja mais alto do que o do dólar comercial.</p>
+    <h2>Dólar Turismo</h2>
+    <p>Já o dólar turismo é voltado para pessoas físicas que compram a moeda para viagens internacionais, seja em espécie, cartão pré-pago ou transferências para o exterior. Esse tipo de dólar inclui custos adicionais, como o lucro das casas de câmbio e impostos (como o IOF - Imposto sobre Operações Financeiras), o que faz com que seu valor seja mais alto do que o do dólar comercial.</p>
 
-<h2>Por que essa diferença existe?</h2>
-<p>A principal razão da diferença é o custo da operação. No dólar turismo, há uma série de fatores que encarecem a moeda, como menor volume negociado, custos administrativos, impostos e riscos de flutuação cambial. No dólar comercial, o volume é maior, os riscos são diluídos, e os custos operacionais são menores.</p>
+    <h2>Por que essa diferença existe?</h2>
+    <p>A principal razão da diferença é o custo da operação. No dólar turismo, há uma série de fatores que encarecem a moeda, como menor volume negociado, custos administrativos, impostos e riscos de flutuação cambial. No dólar comercial, o volume é maior, os riscos são diluídos, e os custos operacionais são menores.</p>
   </div>
+
   <script>
-    const API_KEY = '02a5e2cf80c242c889513d237cf5ace5'; // substitua com sua chave
+    const API_KEY = '02a5e2cf80c242c889513d237cf5ace5';
     const moedas = ['USD', 'EUR', 'GBP', 'JPY', 'ARS', 'BTC', 'ETH', 'USDT', 'BNB', 'SOL'];
-  
+
     async function atualizarCotacoes() {
       const url = `https://openexchangerates.org/api/latest.json?app_id=${API_KEY}`;
       const res = await fetch(url);
       const data = await res.json();
       const brlRate = data.rates.BRL;
-  
+
       const tbody = document.querySelector("#tabelaMoedas tbody");
       tbody.innerHTML = "";
-  
+
       moedas.forEach(moeda => {
         if (data.rates[moeda]) {
           const valorEmBRL = brlRate / data.rates[moeda];
@@ -113,28 +154,28 @@
         }
       });
     }
-  
+
     async function converter() {
       const valor = parseFloat(document.getElementById("valor").value);
       const moeda = document.getElementById("moeda").value;
-  
+
       if (isNaN(valor)) {
         document.getElementById("resultado").textContent = "Digite um valor válido.";
         return;
       }
-  
+
       const url = `https://openexchangerates.org/api/latest.json?app_id=${API_KEY}`;
       const res = await fetch(url);
       const data = await res.json();
-  
+
       const taxaMoeda = data.rates[moeda];
       const taxaBRL = data.rates.BRL;
       const valorConvertido = valor * (taxaBRL / taxaMoeda);
-  
+
       document.getElementById("resultado").textContent =
         `${valor} ${moeda} = R$ ${valorConvertido.toFixed(2)}`;
     }
-  
+
     function nomeCompletoMoeda(sigla) {
       const nomes = {
         USD: "Dólar Americano",
@@ -150,10 +191,8 @@
       };
       return nomes[sigla] || sigla;
     }
-  
+
     atualizarCotacoes();
   </script>
-  
 </body>
-  
 </html>
