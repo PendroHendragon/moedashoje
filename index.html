@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Conversor de Moedas e Criptos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+    h1 {
+      color: #333;
+    }
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 80%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    input, select, button {
+      padding: 8px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    #resultado {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>💱 Conversor de Moedas & Criptomoedas para Real (BRL)</h1>
+
+  <div>
+    <input type="number" id="valor" placeholder="Valor" />
+    <select id="moeda">
+      <option value="USD">Dólar (USD)</option>
+      <option value="EUR">Euro (EUR)</option>
+      <option value="GBP">Libra (GBP)</option>
+      <option value="JPY">Iene (JPY)</option>
+      <option value="ARS">Peso Argentino (ARS)</option>
+      <option value="BTC">Bitcoin (BTC)</option>
+      <option value="ETH">Ethereum (ETH)</option>
+      <option value="USDT">Tether (USDT)</option>
+      <option value="BNB">BNB</option>
+      <option value="SOL">Solana (SOL)</option>
+    </select>
+    <button onclick="converter()">Converter para BRL</button>
+    <div id="resultado"></div>
+  </div>
+
+  <h2>🌍 Cotações em Tempo Real (para BRL)</h2>
+  <table id="tabelaMoedas">
+    <thead>
+      <tr>
+        <th>Moeda</th>
+        <th>Sigla</th>
+        <th>Valor em BRL</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const API_KEY = '02a5e2cf80c242c889513d237cf5ace5'; // substitua com sua chave
+    const moedas = ['USD', 'EUR', 'GBP', 'JPY', 'ARS', 'BTC', 'ETH', 'USDT', 'BNB', 'SOL'];
+  
+    async function atualizarCotacoes() {
+      const url = `https://openexchangerates.org/api/latest.json?app_id=${API_KEY}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const brlRate = data.rates.BRL;
+  
+      const tbody = document.querySelector("#tabelaMoedas tbody");
+      tbody.innerHTML = "";
+  
+      moedas.forEach(moeda => {
+        if (data.rates[moeda]) {
+          const valorEmBRL = brlRate / data.rates[moeda];
+          const row = `
+            <tr>
+              <td>${nomeCompletoMoeda(moeda)}</td>
+              <td>${moeda}</td>
+              <td>R$ ${valorEmBRL.toFixed(2)}</td>
+            </tr>
+          `;
+          tbody.innerHTML += row;
+        }
+      });
+    }
+  
+    async function converter() {
+      const valor = parseFloat(document.getElementById("valor").value);
+      const moeda = document.getElementById("moeda").value;
+  
+      if (isNaN(valor)) {
+        document.getElementById("resultado").textContent = "Digite um valor válido.";
+        return;
+      }
+  
+      const url = `https://openexchangerates.org/api/latest.json?app_id=${API_KEY}`;
+      const res = await fetch(url);
+      const data = await res.json();
+  
+      const taxaMoeda = data.rates[moeda];
+      const taxaBRL = data.rates.BRL;
+      const valorConvertido = valor * (taxaBRL / taxaMoeda);
+  
+      document.getElementById("resultado").textContent =
+        `${valor} ${moeda} = R$ ${valorConvertido.toFixed(2)}`;
+    }
+  
+    function nomeCompletoMoeda(sigla) {
+      const nomes = {
+        USD: "Dólar Americano",
+        EUR: "Euro",
+        GBP: "Libra Esterlina",
+        JPY: "Iene Japonês",
+        ARS: "Peso Argentino",
+        BTC: "Bitcoin",
+        ETH: "Ethereum",
+        USDT: "Tether",
+        BNB: "BNB",
+        SOL: "Solana"
+      };
+      return nomes[sigla] || sigla;
+    }
+  
+    atualizarCotacoes();
+  </script>
+  
+</body>
+</html>
