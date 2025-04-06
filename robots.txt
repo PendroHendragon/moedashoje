@@ -1,6 +1,4 @@
 User-agent: *
-Allow: /
-
-
-# Sitemap para facilitar a indexação
+Disallow:
 Sitemap: https://moedastoday.vercel.app/sitemap.xml
+
